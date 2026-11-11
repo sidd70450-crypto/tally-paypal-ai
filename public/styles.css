@@ -304,3 +304,8 @@ button { font: inherit; cursor: pointer; color: inherit; }
 .view-chip b { color: var(--brand-2); font-weight: 700; }
 .view-chip[hidden] { display: none; }
 .pulse-in { animation: pop .5s var(--ease), glow 1.2s ease-in-out 2; }
+
+/* chat items must never shrink when the conversation overflows */
+.chat > * { flex-shrink: 0; }
+.view-chip { white-space: nowrap; min-width: 0; max-width: 380px; }
+.view-chip b { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
