@@ -10,6 +10,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Instrument+Sans:wght@400;500;600;700&family=Courier+Prime:wght@400;700&display=swap" />
   <link rel="stylesheet" href="/styles.css" />
+  <script type="importmap">
+    { "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    } }
+  </script>
   <style>
     .wrap { max-width: 1180px; margin: 0 auto; padding-left: max(22px, env(safe-area-inset-left, 0px)); padding-right: max(22px, env(safe-area-inset-right, 0px)); }
     h1, h2, h3 { font-family: var(--f-serif); font-weight: 400; text-wrap: balance; margin: 0; }
@@ -24,6 +30,13 @@
     .proof b { color: var(--steam); font-weight: 600; }
 
     /* the receipt printer + tape, in 3D */
+    /* WebGL hero: shown once the scene is running, edges feathered into the page */
+    .hero3d { display: none; width: 100%; height: min(680px, 74vh); position: relative; }
+    .hero3d canvas { display: block; width: 100%; height: 100%; -webkit-mask: radial-gradient(closest-side, #000 72%, transparent 100%); mask: radial-gradient(closest-side, #000 72%, transparent 100%); }
+    .stage.webgl .hero3d { display: block; }
+    .stage.webgl .rig, .stage.webgl .floor { display: none; }
+    .stage.webgl { perspective: none; }
+    @media (max-width: 980px) { .hero3d { height: 460px; } }
     .stage { perspective: 1400px; perspective-origin: 50% 20%; display: grid; justify-items: center; }
     .rig { position: relative; transform-style: preserve-3d; transform: rotateX(16deg) rotateY(-20deg) rotateZ(1.5deg); transition: transform .5s var(--ease); will-change: transform; }
     .printer { position: relative; width: 360px; height: 74px; border-radius: 14px 14px 10px 10px; transform-style: preserve-3d; background: linear-gradient(#3a2c22, #2a1f18); box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 30px 50px -20px rgba(0,0,0,.7); }
@@ -130,7 +143,7 @@
   <main>
     <div class="wrap">
       <section class="hero">
-        <div>
+        <div class="hero-copy">
           <h1>The money work of a small shop, done by AI on PayPal.</h1>
           <p class="lede">Tally sells to your customers, sends your invoices, refunds the unhappy ones and pays your contractors, all from plain English. Anything risky waits for you to approve it.</p>
           <div class="ctas">
@@ -152,6 +165,7 @@
             </div>
           </div>
           <div class="floor" aria-hidden="true"></div>
+          <div class="hero3d" id="hero3d"></div>
         </div>
       </section>
     </div>
@@ -222,6 +236,8 @@
   </main>
   <footer><div class="wrap">Tally, built for the PayPal + AI hackathon. Everything here runs in the PayPal sandbox, so no real money moves.</div></footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
   <script type="module">
     const $ = (id) => document.getElementById(id);
@@ -237,8 +253,16 @@
     let lenis = null;
     if (!reduced && window.Lenis) {
       lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
-      const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
-      requestAnimationFrame(raf);
+      if (window.gsap && window.ScrollTrigger) {
+        // One clock for smooth scroll and scroll-driven animation.
+        gsap.registerPlugin(ScrollTrigger);
+        lenis.on("scroll", ScrollTrigger.update);
+        gsap.ticker.add((t) => lenis.raf(t * 1000));
+        gsap.ticker.lagSmoothing(0);
+      } else {
+        const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
+        requestAnimationFrame(raf);
+      }
     } else {
       document.documentElement.style.scrollBehavior = "smooth";
     }
@@ -300,7 +324,18 @@
         }
       }
     }
-    print();
+    // WebGL hero when possible; the CSS receipt stays as the fallback.
+    (async () => {
+      let webgl = false;
+      if (!reduced) {
+        try {
+          const { initHero3D } = await import("/hero3d.js");
+          webgl = await initHero3D({ mount: $("hero3d"), hero: document.querySelector(".hero"), header: document.querySelector(".topbar") });
+          if (webgl) { stage.classList.add("webgl"); window.ScrollTrigger?.refresh(); }
+        } catch (err) { console.warn("3D hero unavailable, using the CSS receipt", err); }
+      }
+      if (!webgl) print();
+    })();
 
     // ---- Sale journey: stations rise in 3D with scroll, click for detail ----
     const DETAILS = [
