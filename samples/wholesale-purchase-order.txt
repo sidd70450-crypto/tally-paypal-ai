@@ -1,0 +1,14 @@
+PURCHASE ORDER  #PO-2291
+From: Northside Cafe Co. — Accounts Payable
+Contact: Dana Whitfield <ap@northsidecafe.example>
+Date: Nov 10, 2026
+Terms: Net 15
+
+To: Ember & Oak Coffee Roasters
+
+  Qty  Item                                   Unit price
+  6    House Espresso Blend, 2lb bag          $38.00   (wholesale)
+  4    Colombia Huila, 12oz                   $14.00   (wholesale)
+  2    Cold Brew Pitcher Kit                  $30.00
+
+Please invoice to the contact above. Thank you!

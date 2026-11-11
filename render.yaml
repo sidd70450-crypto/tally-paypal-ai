@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: tally-paypal-ai
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/config
+    envVars:
+      - key: AI_PROVIDER
+        value: gemini
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: PAYPAL_CLIENT_ID
+        sync: false
+      - key: PAYPAL_CLIENT_SECRET
+        sync: false
+      - key: PAYPAL_ENV
+        value: sandbox
+      - key: HOSTED
+        value: "1"
+      - key: ADMIN_TOKEN
+        generateValue: true
+      - key: AUTO_REFUND_LIMIT
+        value: "50"
+      - key: AUTO_PAYOUT_LIMIT
+        value: "100"

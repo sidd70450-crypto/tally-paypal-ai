@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#06070c" />
+  <title>Tally Console — AI finance clerk on PayPal</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧾</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community@32.3.3/styles/ag-grid.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community@32.3.3/styles/ag-theme-quartz.css" />
+  <link rel="stylesheet" href="/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@32.3.3/dist/ag-grid-community.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="logo" href="/"><div class="logo-mark">🧾</div>Tally <small class="hide-sm">AI finance clerk · Ember &amp; Oak Coffee</small></a>
+    <span id="mode" class="badge">PayPal Sandbox</span>
+    <div class="spacer"></div>
+    <div class="pop-wrap">
+      <button class="btn" id="guardBtn">🛡️ <span class="hide-sm">Guardrails</span></button>
+      <div class="popover" id="guardPop" hidden>
+        <b>Agent spending guardrails</b>
+        <p class="muted">Tally acts on its own below these limits. Anything above them waits for your approval.</p>
+        <label>Auto-approve refunds up to <span>$<input type="number" id="g-refund" min="0" step="5" /></span></label>
+        <label>Auto-approve payout batches up to <span>$<input type="number" id="g-payout" min="0" step="5" /></span></label>
+        <label>Hard cap per invoice <span>$<input type="number" id="g-invoice" min="0" step="100" /></span></label>
+        <button class="btn primary" id="g-save" style="width:100%;justify-content:center">Save guardrails</button>
+      </div>
+    </div>
+    <a class="btn" href="/shop" target="_blank">🛍️ <span class="hide-sm">Storefront</span></a>
+    <button class="btn ghost" id="resetBtn" title="Clear ledger & chats">Reset</button>
+  </header>
+
+  <nav class="tour reveal" id="tour">
+    <span class="tour-label">Try the full loop →</span>
+    <button data-step="sell"><i>1</i> Customer buys via AI concierge</button>
+    <button data-step="invoice"><i>2</i> Invoice a purchase order</button>
+    <button data-step="payout"><i>3</i> Pay contractors from a timesheet</button>
+    <button data-step="refund"><i>4</i> Refund an unhappy customer</button>
+    <button data-step="ask"><i>5</i> Ask about cash flow</button>
+  </nav>
+
+  <main class="layout">
+    <section class="panel chat-panel spot reveal" id="chatPanel" style="--d:.05s">
+      <div class="drop-hint">Drop a quote, timesheet, PO or receipt — Tally will read it</div>
+      <div class="panel-h"><span class="orb" id="orb"></span> Ask Tally <span class="sub" id="aiLabel">AI + PayPal tools</span>
+        <button class="btn ghost small" id="newChat" style="margin-left:auto" title="Start a new conversation">New chat</button>
+      </div>
+      <div class="chat" id="chat"></div>
+      <div class="suggest" id="suggest"></div>
+      <div class="files" id="files"></div>
+      <form class="composer" id="form">
+        <label class="iconbtn" title="Attach a document or image">📎<input type="file" id="file" multiple hidden accept="image/*,application/pdf,.txt,.csv,.md,.json" /></label>
+        <textarea id="input" rows="1" placeholder="Ask Tally to invoice, refund, pay or explain…"></textarea>
+        <button class="btn primary" id="sendBtn" style="height:42px">Send</button>
+      </form>
+    </section>
+
+    <section class="right">
+      <div class="kpis">
+        <div class="kpi spot reveal" style="--d:.1s"><div class="label">Collected</div><div class="value" id="k-collected">$0.00</div><div class="hint">captured payments</div></div>
+        <div class="kpi spot reveal" style="--d:.15s"><div class="label">Outstanding</div><div class="value" id="k-out">$0.00</div><div class="hint" id="k-out-h">open invoices</div></div>
+        <div class="kpi spot reveal" style="--d:.2s"><div class="label">Refunded</div><div class="value" id="k-ref">$0.00</div><div class="hint">to customers</div></div>
+        <div class="kpi spot reveal" style="--d:.25s"><div class="label">Paid out</div><div class="value" id="k-pay">$0.00</div><div class="hint">PayPal Payouts</div></div>
+        <div class="kpi accent spot reveal" style="--d:.3s"><div class="label">Admin time saved</div><div class="value" id="k-time">0m</div><div class="hint" id="k-time-h">0 actions by Tally</div></div>
+      </div>
+      <div class="approvals" id="approvals"></div>
+      <div class="panel grid-panel reveal" style="--d:.35s">
+        <div class="panel-h">📒 Live PayPal ledger <span class="sub" id="count"></span>
+          <span class="view-chip" id="viewChip" hidden>🤖 Tally filtered: <b id="viewChipText"></b> <button class="btn ghost small" id="viewClear">Clear ✕</button></span>
+          <input id="quick" placeholder="Filter…" />
+          <button class="btn" id="syncBtn" title="Refresh statuses from PayPal">↻ <span class="hide-sm">Sync</span></button>
+          <button class="btn" id="csvBtn" title="Export CSV">⬇ <span class="hide-sm">CSV</span></button>
+        </div>
+        <div id="grid" class="ag-theme-quartz-dark"></div>
+        <div class="grid-tip">Tip: click any row for details and one-click actions.</div>
+      </div>
+    </section>
+  </main>
+
+  <aside class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer-h"><b id="d-title"></b><button class="btn ghost" id="d-close">✕</button></div>
+    <div class="drawer-b" id="d-body"></div>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+  <div class="toasts" id="toasts"></div>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
