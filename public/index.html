@@ -2,278 +2,347 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#06070c" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#17110d" />
   <title>Tally — AI agents that run your shop's money on PayPal</title>
   <meta name="description" content="Tally: an AI shopping concierge and an AI finance clerk that sell, invoice, refund and pay people through PayPal, with human-approved guardrails." />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧾</text></svg>" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 22'%3E%3Cg stroke='%23f0a64a' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M4 3v16M9 3v16M14 3v16M19 3v16'/%3E%3Cpath d='M1.5 17.5 24.5 4.5'/%3E%3C/g%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Instrument+Sans:wght@400;500;600;700&family=Courier+Prime:wght@400;700&display=swap" />
   <link rel="stylesheet" href="/styles.css" />
   <style>
-    .wrap { max-width: 1180px; margin: 0 auto; padding: 0 22px; }
-    section { padding: 56px 0; }
-    .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 700; color: var(--brand-2); padding: 6px 12px; border-radius: 999px; border: 1px solid rgba(255, 170, 110, .3); background: rgba(255, 138, 61, .08); }
-    .eyebrow::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 10px var(--ok); animation: pulse 2s infinite; }
-    h2 { font-size: clamp(26px, 3.4vw, 40px); letter-spacing: -.03em; margin: 12px 0 10px; line-height: 1.1; }
-    .lead { color: var(--ink-2); font-size: 16px; max-width: 640px; }
-    .grad { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .wrap { max-width: 1180px; margin: 0 auto; padding-left: max(22px, env(safe-area-inset-left, 0px)); padding-right: max(22px, env(safe-area-inset-right, 0px)); }
+    h1, h2, h3 { font-family: var(--f-serif); font-weight: 400; text-wrap: balance; margin: 0; }
+    p { margin: 0; }
 
-    /* hero */
-    .hero { display: grid; grid-template-columns: 1.05fr .95fr; gap: 48px; align-items: center; padding-top: 64px; }
-    .hero h1 { font-size: clamp(36px, 5.6vw, 66px); line-height: 1.02; letter-spacing: -.045em; margin: 18px 0 16px; font-weight: 900; }
-    .hero h1 .grad { background-size: 200% auto; animation: sheen 6s linear infinite; }
-    @keyframes sheen { to { background-position: 200% center; } }
-    .hero p { font-size: 17px; color: var(--ink-2); max-width: 540px; margin: 0 0 26px; }
-    .ctas { display: flex; gap: 12px; flex-wrap: wrap; }
-    .trust { display: flex; gap: 18px; margin-top: 26px; flex-wrap: wrap; color: var(--muted); font-size: 13px; }
-    .trust b { color: var(--ink); }
+    /* ---------- hero ---------- */
+    .hero { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 56px; align-items: center; padding-block: 72px 88px; }
+    .hero h1 { font-size: clamp(40px, 5.4vw, 68px); line-height: 1.04; letter-spacing: -.015em; }
+    .hero .lede { font-size: 18.5px; line-height: 1.6; color: var(--steam); max-width: 34em; margin-top: 22px; }
+    .ctas { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 32px; }
+    .proof { margin-top: 26px; font-size: 14px; color: var(--dust); max-width: 36em; }
+    .proof b { color: var(--steam); font-weight: 600; }
 
-    /* live demo window */
-    .demo { position: relative; border-radius: 20px; padding: 0; overflow: hidden; box-shadow: 0 30px 80px rgba(0, 0, 0, .55), 0 0 0 1px rgba(255, 255, 255, .06); transition: transform .3s var(--ease); }
-    .demo-h { display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-bottom: 1px solid var(--line); background: rgba(255, 255, 255, .03); }
-    .demo-h i { width: 11px; height: 11px; border-radius: 50%; background: #ff5f57; } .demo-h i:nth-child(2) { background: #febc2e; } .demo-h i:nth-child(3) { background: #28c840; }
-    .demo-h span { margin-left: 8px; font-size: 12.5px; color: var(--muted); font-weight: 600; display: flex; align-items: center; gap: 8px; }
-    .demo-b { height: 360px; padding: 16px; display: flex; flex-direction: column; gap: 10px; overflow: hidden; justify-content: flex-end; }
-    .demo-b .msg { font-size: 13.5px; }
-    .chip-row { display: flex; gap: 6px; flex-wrap: wrap; align-self: flex-start; }
-    .chip { font-family: ui-monospace, Consolas, monospace; font-size: 11.5px; padding: 5px 10px; border-radius: 9px; border: 1px solid var(--line-2); color: #9fbcff; background: rgba(255, 255, 255, .03); position: relative; overflow: hidden; animation: msgIn .35s var(--ease) both; }
-    .chip::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255, 190, 120, .2), transparent); animation: shimmer 1s infinite; }
-    .chip.ok { border-color: rgba(52, 211, 153, .4); color: var(--ok); }
-    .chip.ok::after { display: none; }
-    .msg.warn { align-self: flex-start; background: rgba(251, 191, 36, .1); border: 1px solid rgba(251, 191, 36, .35); color: var(--warn); }
-    .caret { display: inline-block; width: 2px; height: 1em; background: #fff; margin-left: 2px; vertical-align: -2px; animation: pulse .9s infinite; }
-    .demo-input { margin: 0 16px 16px; padding: 11px 13px; border-radius: 12px; border: 1px solid var(--line-2); background: rgba(0, 0, 0, .3); color: var(--muted); font-size: 13.5px; min-height: 44px; }
-    .demo-input.typing-on { color: var(--ink); border-color: rgba(255, 150, 90, .5); box-shadow: 0 0 0 4px rgba(255, 138, 61, .1); }
-    .float { position: absolute; padding: 9px 13px; border-radius: 13px; font-size: 12.5px; font-weight: 700; background: rgba(16, 18, 28, .9); border: 1px solid var(--line-2); box-shadow: 0 14px 40px rgba(0, 0, 0, .5); backdrop-filter: blur(10px); white-space: nowrap; transition: transform .2s linear; z-index: 2; }
-    .float.f1 { top: 18px; right: -18px; color: var(--ok); }
-    .float.f2 { bottom: 86px; left: -26px; color: var(--warn); }
-    .demo-wrap { position: relative; }
+    /* the receipt printer + tape, in 3D */
+    .stage { perspective: 1400px; perspective-origin: 50% 20%; display: grid; justify-items: center; }
+    .rig { position: relative; transform-style: preserve-3d; transform: rotateX(16deg) rotateY(-20deg) rotateZ(1.5deg); transition: transform .5s var(--ease); will-change: transform; }
+    .printer { position: relative; width: 360px; height: 74px; border-radius: 14px 14px 10px 10px; transform-style: preserve-3d; background: linear-gradient(#3a2c22, #2a1f18); box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 30px 50px -20px rgba(0,0,0,.7); }
+    .printer::before { content: ""; position: absolute; inset: 100% 0 auto; height: 26px; transform-origin: top; transform: rotateX(-90deg); background: #1c140f; border-radius: 0 0 10px 10px; }
+    .printer .slot { position: absolute; left: 22px; right: 22px; bottom: 12px; height: 7px; border-radius: 4px; background: #0d0907; box-shadow: inset 0 2px 3px rgba(0,0,0,.8); }
+    .printer .led { position: absolute; right: 24px; top: 16px; width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 10px var(--ok); }
+    .printer .led.busy { background: var(--crema); box-shadow: 0 0 12px var(--crema); animation: breathe .6s ease-in-out infinite; }
+    .printer .brand { position: absolute; left: 22px; top: 14px; font: 600 12px var(--f-sans); color: var(--steam); letter-spacing: .02em; }
+    .tape { position: relative; width: 316px; margin: -14px auto 0; transform-origin: top center; transform: translateZ(6px) rotateX(-4deg); background: var(--paper); color: var(--paper-ink); font: 14px/1.45 var(--f-tape); padding: 22px 20px 30px; box-shadow: 0 40px 60px -25px rgba(0,0,0,.75), inset 0 14px 14px -10px rgba(0,0,0,.35);
+      -webkit-mask: linear-gradient(#000, #000) top / 100% calc(100% - 10px) no-repeat, conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / 14px 10px repeat-x;
+              mask: linear-gradient(#000, #000) top / 100% calc(100% - 10px) no-repeat, conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / 14px 10px repeat-x; }
+    .tape::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(100deg, rgba(255,255,255,.35), transparent 30%, transparent 70%, rgba(0,0,0,.08)); }
+    .tape .head { text-align: center; font-weight: 700; }
+    .tape .sub { text-align: center; font-size: 12px; opacity: .7; }
+    .tape hr { border: 0; border-top: 1.5px dashed rgba(43, 32, 24, .5); margin: 10px 0; }
+    .feed { height: 300px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; }
+    .entry { position: relative; padding: 7px 0 9px; border-bottom: 1.5px dashed rgba(43, 32, 24, .28); animation: feed .45s var(--ease); flex-shrink: 0; }
+    @keyframes feed { from { transform: translateY(18px); opacity: 0; } }
+    .entry .row { display: flex; justify-content: space-between; gap: 10px; }
+    .entry .what { font-weight: 700; }
+    .entry .meta { font-size: 11.5px; opacity: .72; display: flex; flex-wrap: wrap; justify-content: space-between; column-gap: 8px; }
+    .entry .meta .id { white-space: nowrap; }
+    .entry .meta .note { margin-left: auto; }
+    .stamp { position: absolute; left: 22%; top: 10px; font: 700 11.5px var(--f-sans); letter-spacing: .04em; padding: 3px 8px; border: 2.5px solid currentColor; border-radius: 4px; transform: rotate(-9deg) scale(1.6); opacity: 0; animation: stamp .35s var(--ease) forwards; mix-blend-mode: multiply; }
+    .stamp.held { color: #b9771a; }
+    .stamp.ok { color: #2f8a53; }
+    @keyframes stamp { to { transform: rotate(-9deg) scale(1); opacity: .92; } }
+    .caret::after { content: "▌"; animation: blink 1s steps(1) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+    .floor { width: 300px; height: 40px; margin-top: 18px; border-radius: 50%; background: radial-gradient(closest-side, rgba(0,0,0,.55), transparent); transform: rotateX(70deg); }
 
-    /* stats */
-    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-    .stat { padding: 20px; border-radius: 18px; text-align: left; }
-    .stat .n { font-size: 40px; font-weight: 900; letter-spacing: -.04em; }
-    .stat .l { color: var(--muted); font-size: 13px; font-weight: 600; }
+    /* ---------- sections ---------- */
+    section.block { padding-block: 84px; border-top: 1px solid var(--line); }
+    .block h2 { font-size: clamp(30px, 3.6vw, 44px); line-height: 1.1; max-width: 18em; }
+    .block .intro { color: var(--steam); font-size: 17px; max-width: 38em; margin-top: 14px; }
 
-    /* flow */
-    .flow { display: flex; align-items: stretch; gap: 0; margin-top: 30px; }
-    .node { flex: 1; min-width: 0; padding: 18px 14px; border-radius: 18px; text-align: center; cursor: pointer; transition: transform .3s var(--ease), border-color .3s, box-shadow .3s; }
-    .node .ic { font-size: 30px; display: grid; place-items: center; width: 58px; height: 58px; margin: 0 auto 10px; border-radius: 16px; background: var(--grad-soft); border: 1px solid rgba(255, 170, 110, .25); transition: transform .4s var(--ease); }
-    .node b { display: block; font-size: 14px; }
-    .node small { color: var(--muted); font-size: 12px; }
-    .node:hover, .node.active { transform: translateY(-6px); border-color: rgba(255, 170, 110, .55); box-shadow: 0 18px 50px rgba(255, 110, 60, .18); }
-    .node.active .ic, .node:hover .ic { transform: scale(1.1) rotate(-6deg); }
-    .node.lit .ic { box-shadow: 0 0 30px rgba(255, 140, 80, .7); }
-    .link { flex: 0 0 46px; position: relative; align-self: center; height: 2px; background: rgba(255, 255, 255, .1); }
-    .link::after { content: ""; position: absolute; top: -3px; left: 0; width: 8px; height: 8px; border-radius: 50%; background: var(--brand-2); box-shadow: 0 0 12px var(--brand); animation: travel 2.4s linear infinite; animation-delay: var(--d, 0s); }
-    @keyframes travel { from { left: 0; opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } to { left: calc(100% - 8px); opacity: 0; } }
-    .flow-detail { margin-top: 18px; padding: 18px 20px; border-radius: 18px; display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: center; min-height: 96px; }
-    .flow-detail .big { font-size: 38px; }
-    .flow-detail h3 { margin: 0 0 4px; font-size: 16px; }
-    .flow-detail p { margin: 0; color: var(--ink-2); }
-    .flow-detail code { font-size: 12px; color: #9fbcff; background: rgba(255,255,255,.05); padding: 1px 6px; border-radius: 6px; }
-    .fade-swap { animation: msgIn .4s var(--ease); }
+    /* sale journey: a real sequence, so it is numbered; stations rise in 3D as you scroll */
+    .journey { margin-top: 44px; perspective: 1100px; }
+    .stations { position: relative; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; transform-style: preserve-3d; }
+    .stations::before { content: ""; position: absolute; left: 34px; width: calc(.8 * (100% - 56px) + 56px); top: 34px; height: 2px; background: var(--line-2); }
+    .stations::after { content: ""; position: absolute; left: 34px; top: 34px; height: 2px; width: calc((.8 * (100% - 56px) + 56px) * var(--progress, 0)); background: var(--crema); transition: width .2s linear; }
+    .station { position: relative; z-index: 1; text-align: left; background: none; border: 0; padding: 0; color: inherit; cursor: pointer; transform-style: preserve-3d; transform-origin: 50% 100%; transform: rotateX(calc(var(--tilt, 0) * 55deg)) translateZ(calc(var(--tilt, 0) * -120px)); opacity: calc(1 - var(--tilt, 0) * .7); }
+    .station .num { width: 68px; height: 68px; border-radius: 50%; display: grid; place-items: center; background: var(--roast); border: 2px solid var(--line-2); font-family: var(--f-serif); font-size: 26px; color: var(--steam); transition: border-color .2s, color .2s, background .2s, transform .25s var(--ease); }
+    .station b { display: block; margin-top: 14px; font-size: 16px; font-weight: 600; }
+    .station small { display: block; color: var(--dust); font-size: 13.5px; margin-top: 2px; }
+    .station.lit .num { border-color: var(--crema); color: var(--crema); }
+    .station.active .num { background: var(--crema); border-color: var(--crema); color: var(--crema-ink); transform: translateZ(30px) scale(1.06); }
+    .station:hover .num { border-color: var(--crema); }
+    .detail { margin-top: 34px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; align-items: start; padding: 26px 28px; background: var(--roast); border: 1px solid var(--line); border-radius: var(--r-lg); min-height: 150px; }
+    .detail h3 { font-size: 24px; line-height: 1.2; }
+    .detail p { color: var(--steam); font-size: 15.5px; }
+    .detail .apis { font-size: 13.5px; color: var(--dust); margin-top: 10px; }
+    .detail .swap { animation: arrive .3s var(--ease); }
 
-    /* features */
-    .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 28px; }
-    .feature { padding: 22px; border-radius: 18px; transition: transform .3s var(--ease), border-color .3s; }
-    .feature:hover { transform: translateY(-4px); border-color: rgba(255, 170, 110, .35); }
-    .feature .ic { font-size: 26px; width: 48px; height: 48px; display: grid; place-items: center; border-radius: 14px; background: var(--grad-soft); margin-bottom: 12px; }
-    .feature h3 { margin: 0 0 6px; font-size: 16px; }
-    .feature p { margin: 0; color: var(--ink-2); font-size: 13.5px; }
+    /* what Tally handles: a plain two-column list, no cards */
+    .handles { margin-top: 40px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 56px; }
+    .handle { padding: 22px 0; border-top: 1px solid var(--line); display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 20px; }
+    .handle .ask { font-family: var(--f-serif); font-size: 19px; color: var(--crema); line-height: 1.3; }
+    .handle h3 { font-family: var(--f-sans); font-weight: 600; font-size: 16.5px; }
+    .handle p { color: var(--steam); font-size: 15px; margin-top: 4px; }
 
-    .apis { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
-    .apis span { padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line-2); background: rgba(255, 255, 255, .03); font-size: 13px; font-weight: 600; color: var(--ink-2); transition: all .25s var(--ease); }
-    .apis span:hover { color: var(--ink); border-color: rgba(255, 170, 110, .5); transform: translateY(-2px); }
-    .apis span.pp { border-color: rgba(76, 141, 255, .4); color: #9fc0ff; }
+    /* guardrail demo: one real approval card, live */
+    .guard { margin-top: 40px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: center; }
+    .guard ul { margin: 0; padding-left: 20px; color: var(--steam); display: grid; gap: 10px; font-size: 16px; }
+    .guard li::marker { color: var(--crema); }
+    .demo-approval { perspective: 900px; }
+    .demo-approval .approval { transform: rotateX(8deg) rotateY(10deg); transition: transform .4s var(--ease); box-shadow: 0 30px 60px -30px rgba(0,0,0,.8); }
+    .demo-approval:hover .approval { transform: none; }
+    .demo-approval .result { margin-top: 12px; font-size: 14px; color: var(--ok); min-height: 22px; }
 
-    .final { text-align: center; padding: 50px 24px; border-radius: 24px; margin-bottom: 56px; background: radial-gradient(80% 120% at 50% 0%, rgba(255, 138, 61, .22), transparent 60%), rgba(255, 255, 255, .03); }
-    .final .ctas { justify-content: center; margin-top: 18px; }
-    footer { color: var(--muted); font-size: 12.5px; text-align: center; padding: 0 0 40px; }
+    .built { margin-top: 26px; color: var(--dust); font-size: 14.5px; max-width: 46em; }
+    .built b { color: var(--steam); font-weight: 600; }
 
-    @media (max-width: 960px) {
-      .hero { grid-template-columns: 1fr; gap: 34px; padding-top: 36px; }
-      .float { display: none; }
-      .stats { grid-template-columns: repeat(2, 1fr); }
-      .features { grid-template-columns: 1fr; }
-      .flow { flex-direction: column; }
-      .link { flex: 0 0 34px; width: 2px; height: auto; align-self: center; }
-      .link::after { left: -3px; animation-name: travelY; }
-      @keyframes travelY { from { top: 0; opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } to { top: calc(100% - 8px); opacity: 0; } }
-      .demo-b { height: 320px; }
-      section { padding: 40px 0; }
+    .closing { padding-block: 96px; border-top: 1px solid var(--line); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 30px; align-items: end; }
+    .closing h2 { font-size: clamp(30px, 4vw, 50px); line-height: 1.08; max-width: 14em; }
+    footer { border-top: 1px solid var(--line); padding-block: 26px 40px; color: var(--dust); font-size: 13px; }
+
+    @media (max-width: 980px) {
+      .hero { grid-template-columns: minmax(0, 1fr); gap: 40px; padding-block: 44px 64px; }
+      .stage { order: 2; }
+      .stations { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+      .stations::before, .stations::after { display: none; }
+      .station { display: grid; grid-template-columns: 56px minmax(0, 1fr); align-items: center; column-gap: 14px; transform: none; opacity: 1; }
+      .station .num { width: 52px; height: 52px; font-size: 21px; grid-row: span 2; }
+      .station b { margin-top: 0; }
+      .detail, .guard, .handles, .closing { grid-template-columns: minmax(0, 1fr); }
+      .handle { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+      section.block { padding-block: 60px; }
     }
+    @media (max-width: 420px) { .printer { width: 300px; } .tape { width: 262px; font-size: 13px; } .feed { height: 270px; } }
+    @media (prefers-reduced-motion: reduce) { .rig { transform: rotateX(8deg) rotateY(-8deg); } .station { transform: none !important; opacity: 1 !important; } }
   </style>
 </head>
 <body>
   <header class="topbar">
-    <a class="logo" href="/"><div class="logo-mark">🧾</div>Tally</a>
-    <span id="mode" class="badge hide-sm">PayPal Sandbox</span>
+    <a class="logo" href="/"><span class="logo-mark" aria-hidden="true"></span>Tally</a>
+    <span id="mode" class="badge hide-sm">PayPal sandbox</span>
     <div class="spacer"></div>
     <a class="btn ghost hide-sm" href="#how">How it works</a>
-    <a class="btn" href="/shop">🛍️ <span class="hide-sm">Storefront</span></a>
-    <a class="btn primary" href="/console">Open console →</a>
+    <a class="btn" href="/shop">Storefront</a>
+    <a class="btn primary" href="/console">Open the console</a>
   </header>
 
-  <main class="wrap">
-    <section class="hero">
-      <div>
-        <span class="eyebrow reveal">AI agents · PayPal · human-approved</span>
-        <h1 class="reveal" style="--d:.08s">AI agents that run your shop's money. <span class="grad">On PayPal.</span></h1>
-        <p class="reveal" style="--d:.16s">Small businesses lose hours every week to invoices, refunds and paying people. Tally's agents sell, invoice, refund and pay from plain English, and they ask you before any risky move.</p>
-        <div class="ctas reveal" style="--d:.24s">
-          <a class="btn primary big" href="/console">🧾 Open the merchant console</a>
-          <a class="btn big" href="/shop">🛍️ Shop with the AI concierge</a>
+  <main>
+    <div class="wrap">
+      <section class="hero">
+        <div>
+          <h1>The money work of a small shop, done by AI on PayPal.</h1>
+          <p class="lede">Tally sells to your customers, sends your invoices, refunds the unhappy ones and pays your contractors, all from plain English. Anything risky waits for you to approve it.</p>
+          <div class="ctas">
+            <a class="btn primary big" href="/console">Open the merchant console</a>
+            <a class="btn big" href="/shop">Shop with the AI concierge</a>
+          </div>
+          <p class="proof"><b>Running on the real PayPal sandbox.</b> Refunds over $50 and payouts over $100 are held until a person approves them, and the limit is enforced in code.</p>
         </div>
-        <div class="trust reveal" style="--d:.32s"><span>⚡ <b>Real</b> PayPal sandbox calls</span><span>🛡️ <b>Guardrails</b> enforced in code</span><span>📎 Reads <b>PDFs &amp; photos</b></span></div>
-      </div>
-      <div class="demo-wrap reveal" style="--d:.2s">
-        <div class="float f1" data-depth="18">✅ Refund sent · $24.00</div>
-        <div class="float f2" data-depth="-14">🛡️ $155 payout awaiting approval</div>
-        <div class="demo glass" data-tilt>
-          <div class="demo-h"><i></i><i></i><i></i><span><span class="orb" id="demoOrb" style="width:16px;height:16px"></span> Tally · live agent</span></div>
-          <div class="demo-b" id="demoBody"></div>
-          <div class="demo-input" id="demoInput">Ask Tally…</div>
+
+        <div class="stage" id="stage" aria-label="Live receipt of Tally's PayPal actions">
+          <div class="rig" id="rig">
+            <div class="printer"><span class="brand">Tally · Ember &amp; Oak Coffee</span><span class="led" id="led"></span><span class="slot"></span></div>
+            <div class="tape">
+              <div class="head">EMBER &amp; OAK COFFEE</div>
+              <div class="sub">Tally clerk · PayPal sandbox</div>
+              <div class="sub" id="tapeDate"></div>
+              <hr />
+              <div class="feed" id="feed"></div>
+            </div>
+          </div>
+          <div class="floor" aria-hidden="true"></div>
+        </div>
+      </section>
+    </div>
+
+    <section class="block" id="how">
+      <div class="wrap">
+        <h2>How a sale moves through Tally</h2>
+        <p class="intro">Two AI agents share one ledger. Pick a step to see what happens there and which PayPal API does the work.</p>
+        <div class="journey" id="journey">
+          <div class="stations" id="stations">
+            <button class="station" data-i="0" type="button"><span class="num">1</span><b>Shopper asks</b><small>“a gift under $50”</small></button>
+            <button class="station" data-i="1" type="button"><span class="num">2</span><b>Concierge builds the cart</b><small>real catalog, real budget</small></button>
+            <button class="station" data-i="2" type="button"><span class="num">3</span><b>Buyer pays with PayPal</b><small>Smart Payment Button</small></button>
+            <button class="station" data-i="3" type="button"><span class="num">4</span><b>Sale lands in the ledger</b><small>live, in AG Grid</small></button>
+            <button class="station" data-i="4" type="button"><span class="num">5</span><b>Clerk handles the rest</b><small>invoice, refund, pay</small></button>
+          </div>
+          <div class="detail" id="detail" aria-live="polite"></div>
         </div>
       </div>
     </section>
 
-    <section>
-      <div class="stats">
-        <div class="stat glass spot reveal"><div class="n grad" data-count="2">0</div><div class="l">AI agents (buyer + merchant side)</div></div>
-        <div class="stat glass spot reveal" style="--d:.08s"><div class="n grad" data-count="7">0</div><div class="l">PayPal APIs wired in</div></div>
-        <div class="stat glass spot reveal" style="--d:.16s"><div class="n grad" data-count="19">0</div><div class="l">tools, incl. PayPal Agent Toolkit</div></div>
-        <div class="stat glass spot reveal" style="--d:.24s"><div class="n grad" data-count="0">0</div><div class="l">risky moves without your OK</div></div>
+    <section class="block">
+      <div class="wrap">
+        <h2>What you can ask Tally to do</h2>
+        <p class="intro">Each request ends in a real PayPal call, and each call shows up in the chat with PayPal's answer.</p>
+        <div class="handles">
+          <div class="handle"><div class="ask">“Invoice this PO”</div><div><h3>Send invoices from documents</h3><p>Drop in a purchase order, timesheet or receipt photo. Tally reads it and emails a PayPal invoice with a pay link.</p></div></div>
+          <div class="handle"><div class="ask">“Refund it”</div><div><h3>Refund customers</h3><p>Full or partial refunds, found from the original sale, including sales the concierge made.</p></div></div>
+          <div class="handle"><div class="ask">“Pay the team”</div><div><h3>Pay contractors</h3><p>PayPal Payouts to everyone on a timesheet. Batches over your limit wait for your approval.</p></div></div>
+          <div class="handle"><div class="ask">“Who owes us?”</div><div><h3>Answer money questions</h3><p>Tally syncs with PayPal first, then answers from real data and nudges late payers.</p></div></div>
+          <div class="handle"><div class="ask">“Only payouts”</div><div><h3>Drive the ledger</h3><p>Ask to filter, sort or highlight, and the AG Grid on your screen changes to match.</p></div></div>
+          <div class="handle"><div class="ask">“Any disputes?”</div><div><h3>Check disputes and tracking</h3><p>Through PayPal's official Agent Toolkit, running alongside Tally's own tools.</p></div></div>
+        </div>
       </div>
     </section>
 
-    <section id="how">
-      <span class="eyebrow reveal">How money flows</span>
-      <h2 class="reveal">One loop, two agents, <span class="grad">all on PayPal.</span></h2>
-      <p class="lead reveal">Click any step to see what happens there. The dots show money and data moving through the system.</p>
-      <div class="flow reveal" id="flow">
-        <div class="node glass spot" data-i="0"><div class="ic">🛍️</div><b>Shopper</b><small>"gift under $50"</small></div>
-        <div class="link" style="--d:0s"></div>
-        <div class="node glass spot" data-i="1"><div class="ic">🤖</div><b>AI concierge</b><small>builds the cart</small></div>
-        <div class="link" style="--d:.5s"></div>
-        <div class="node glass spot" data-i="2"><div class="ic">🅿️</div><b>PayPal checkout</b><small>buyer pays</small></div>
-        <div class="link" style="--d:1s"></div>
-        <div class="node glass spot" data-i="3"><div class="ic">📒</div><b>Live ledger</b><small>AG Grid, real time</small></div>
-        <div class="link" style="--d:1.5s"></div>
-        <div class="node glass spot" data-i="4"><div class="ic">🧾</div><b>Tally clerk</b><small>invoice · refund · pay</small></div>
-      </div>
-      <div class="flow-detail glass reveal" id="flowDetail"></div>
-    </section>
-
-    <section>
-      <span class="eyebrow reveal">What it does</span>
-      <h2 class="reveal">The back office, <span class="grad">on autopilot.</span></h2>
-      <div class="features">
-        <div class="feature spot reveal"><div class="ic">📎</div><h3>Documents → money</h3><p>Drop in a purchase order, timesheet or receipt. The AI reads it and sends the PayPal invoice or payout batch.</p></div>
-        <div class="feature spot reveal" style="--d:.06s"><div class="ic">🛡️</div><h3>Guardrails you control</h3><p>Refunds and payouts over your limits wait for one-click approval. The limits are enforced in server code, not just the prompt.</p></div>
-        <div class="feature spot reveal" style="--d:.12s"><div class="ic">🛒</div><h3>Agentic commerce</h3><p>The concierge turns "a gift for my dad" into a cart within budget, then a PayPal order with the Smart Payment Button.</p></div>
-        <div class="feature spot reveal" style="--d:.18s"><div class="ic">📒</div><h3>Live AG Grid ledger</h3><p>Every payment streams in as it happens: rows flash on change, overdue invoices are flagged, and you can filter and export to CSV.</p></div>
-        <div class="feature spot reveal" style="--d:.24s"><div class="ic">🔍</div><h3>See every step</h3><p>Each tool call and PayPal response appears in the chat, along with the agent's reasoning.</p></div>
-        <div class="feature spot reveal" style="--d:.3s"><div class="ic">🔄</div><h3>Always in sync</h3><p>Invoices, orders and payouts are re-checked against PayPal automatically, and approved orders are captured.</p></div>
-      </div>
-      <div class="apis reveal">
-        <span class="pp">PayPal Orders v2</span><span class="pp">JS SDK Smart Buttons</span><span class="pp">Invoicing v2</span><span class="pp">Payments v2 · Refunds</span><span class="pp">Payouts v1</span><span class="pp">OAuth 2.0</span><span class="pp">PayPal Agent Toolkit</span><span class="pp">Disputes API</span>
-        <span id="aiChip">Gemini AI</span><span>AG Grid</span><span>Server-Sent Events</span><span>Render</span>
+    <section class="block">
+      <div class="wrap">
+        <h2>A person holds the purse strings</h2>
+        <div class="guard">
+          <ul>
+            <li>Refunds over $50 and payout batches over $100 are held, not sent.</li>
+            <li>The limit lives in server code, so a confused or tricked AI still can't move the money.</li>
+            <li>You change the limits yourself, and every action is logged with PayPal's response.</li>
+          </ul>
+          <div class="demo-approval">
+            <div class="approval">
+              <div class="ic">💸</div>
+              <div class="txt"><b>Needs your approval · $155.00</b><span>Payout to Maya Chen ($60), Leo Park ($50) and Sam Ortiz ($45). Held because it's over your $100 limit.</span></div>
+              <button class="btn ok" id="demoApprove" type="button">Approve and send</button>
+            </div>
+            <div class="result" id="demoResult" aria-live="polite"></div>
+          </div>
+        </div>
+        <p class="built"><b>Built with</b> PayPal Orders, Invoicing, Payments, Payouts, the JS SDK and the PayPal Agent Toolkit, <span id="aiName">Google Gemini</span> for the agents, AG Grid for the ledger, and Render for hosting.</p>
       </div>
     </section>
 
-    <section class="final glass reveal">
-      <h2>Try the whole loop in <span class="grad">two minutes.</span></h2>
-      <p class="lead" style="margin:0 auto">Buy something from the concierge, then watch it land in the console. Refund it, invoice a PO, or pay contractors from a timesheet.</p>
-      <div class="ctas">
-        <a class="btn primary big" href="/console">🧾 Open the merchant console</a>
-        <a class="btn big" href="/shop">🛍️ Open the storefront</a>
-      </div>
-    </section>
-    <footer>Tally · Built for the PayPal + AI hackathon · PayPal sandbox, nothing here moves real money</footer>
+    <div class="wrap">
+      <section class="closing">
+        <h2>Buy something from the concierge, then watch it land in the console.</h2>
+        <div class="ctas" style="margin-top:0">
+          <a class="btn primary big" href="/shop">Start with the storefront</a>
+          <a class="btn big" href="/console">Open the console</a>
+        </div>
+      </section>
+    </div>
   </main>
+  <footer><div class="wrap">Tally, built for the PayPal + AI hackathon. Everything here runs in the PayPal sandbox, so no real money moves.</div></footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
   <script type="module">
-    import { initFx, countTo } from "/fx.js";
-    initFx();
     const $ = (id) => document.getElementById(id);
     const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     fetch("/api/config").then((r) => r.json()).then((c) => {
       if (c.mock) { $("mode").textContent = "Mock mode"; $("mode").classList.add("mock"); }
-      $("aiChip").textContent = c.ai?.provider === "gemini" ? "Google Gemini" : "Anthropic Claude";
+      if (c.ai?.provider === "claude") $("aiName").textContent = "Anthropic Claude";
     }).catch(() => {});
 
-    // Count-up stats when visible
-    const io = new IntersectionObserver((es) => es.forEach((e) => {
-      if (!e.isIntersecting) return;
-      const el = e.target; countTo(el, +el.dataset.count, (n) => Math.round(n).toString(), 1200); io.unobserve(el);
-    }), { threshold: .5 });
-    document.querySelectorAll("[data-count]").forEach((el) => io.observe(el));
+    // ---- Smooth, inertial scrolling ----
+    let lenis = null;
+    if (!reduced && window.Lenis) {
+      lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
+      const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
+      requestAnimationFrame(raf);
+    } else {
+      document.documentElement.style.scrollBehavior = "smooth";
+    }
+    document.querySelectorAll('a[href^="#"]').forEach((a) => a.addEventListener("click", (e) => {
+      const el = document.querySelector(a.getAttribute("href"));
+      if (!el) return;
+      e.preventDefault();
+      lenis ? lenis.scrollTo(el, { offset: -60 }) : el.scrollIntoView({ behavior: "smooth" });
+    }));
 
-    // Pointer parallax for floating badges
-    if (!reduced) addEventListener("pointermove", (e) => {
-      const x = e.clientX / innerWidth - .5, y = e.clientY / innerHeight - .5;
-      document.querySelectorAll("[data-depth]").forEach((el) => { const d = +el.dataset.depth; el.style.transform = `translate(${x * d}px, ${y * d}px)`; });
-    }, { passive: true });
+    // ---- 3D receipt rig follows the pointer ----
+    const rig = $("rig"), stage = $("stage");
+    if (!reduced) {
+      stage.addEventListener("pointermove", (e) => {
+        const r = stage.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+        rig.style.transform = `rotateX(${(16 - y * 14).toFixed(1)}deg) rotateY(${(-20 + x * 26).toFixed(1)}deg) rotateZ(1.5deg)`;
+      });
+      stage.addEventListener("pointerleave", () => { rig.style.transform = ""; });
+    }
 
-    // ---- Live typewriter demo ----
+    // ---- The tape prints Tally's real sandbox actions ----
+    $("tapeDate").textContent = new Date().toLocaleString([], { month: "short", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit" });
     const SCENES = [
-      { prompt: "Invoice Blue Bottle Cafe for 40lb espresso at $19/lb, due in 10 days", tools: ["create_invoice"], reply: "🧾 Invoice sent to Blue Bottle Cafe: <b>$760.00</b>, due Nov 21. Pay link ready." },
-      { prompt: "📎 timesheet.csv: pay everyone on this", tools: ["send_payouts"], reply: "🛡️ <b>$155.00</b> payout batch is over your $100 limit, so it's waiting for your approval.", warn: true },
-      { prompt: "Refund the last storefront order, the beans arrived stale", tools: ["query_ledger", "refund_payment"], reply: "↩️ Refunded <b>$24.00</b> to the customer via PayPal." },
-      { prompt: "Who still owes us money?", tools: ["sync_with_paypal", "query_ledger"], reply: "📊 1 open invoice: Northside Cafe owes <b>$344.00</b>, due Nov 26. Want me to send a reminder?" },
+      { what: "INVOICE", amt: "344.00", id: "INV2-BCF4-NCD6-SJSJ-3DSR", note: "Northside Cafe · SENT" },
+      { what: "SALE", amt: "24.00", id: "60R169244U374500N", note: "V60 dripper · PAID" },
+      { what: "REFUND", amt: "-24.00", id: "50B5078515991153T", note: "beans arrived stale" },
+      { what: "PAYOUT x3", amt: "-155.00", id: "6K4UFKFU9HGDJ", note: "contractors", hold: true },
+      { what: "DISPUTES", amt: "0", id: "Agent Toolkit", note: "none open" },
     ];
-    const body = $("demoBody"), input = $("demoInput"), orb = $("demoOrb");
-    const add = (cls, html) => { const d = document.createElement("div"); d.className = cls; d.innerHTML = html; body.appendChild(d); while (body.children.length > 7) body.firstChild.remove(); return d; };
-    async function play() {
-      for (let i = 0; ; i = (i + 1) % SCENES.length) {
-        const s = SCENES[i];
-        input.classList.add("typing-on");
-        for (let k = 1; k <= s.prompt.length; k++) { input.innerHTML = s.prompt.slice(0, k) + '<span class="caret"></span>'; await sleep(reduced ? 0 : 24 + Math.random() * 30); }
-        await sleep(350);
-        input.classList.remove("typing-on"); input.textContent = "Ask Tally…";
-        add("msg user", s.prompt);
-        orb.classList.add("busy");
-        const row = add("chip-row", "");
-        for (const t of s.tools) {
-          await sleep(500);
-          const c = document.createElement("span"); c.className = "chip"; c.textContent = t + "…"; row.appendChild(c);
-          await sleep(750);
-          c.className = "chip ok"; c.textContent = "✓ " + t;
+    const feed = $("feed"), led = $("led");
+    async function type(el, text) {
+      el.classList.add("caret");
+      for (let i = 1; i <= text.length; i++) { el.textContent = text.slice(0, i); await sleep(reduced ? 0 : 28); }
+      el.classList.remove("caret");
+    }
+    async function print() {
+      for (;;) {
+        for (const s of SCENES) {
+          led.classList.add("busy");
+          const e = document.createElement("div");
+          e.className = "entry";
+          e.innerHTML = `<div class="row"><span class="what"></span><span class="amt"></span></div><div class="meta"><span class="id"></span><span class="note"></span></div>`;
+          feed.appendChild(e);
+          while (feed.children.length > 6) feed.firstElementChild.remove();
+          await type(e.querySelector(".what"), s.what);
+          await type(e.querySelector(".amt"), s.amt);
+          e.querySelector(".id").textContent = s.id;
+          e.querySelector(".note").textContent = s.note;
+          led.classList.remove("busy");
+          if (s.hold) {
+            await sleep(400);
+            e.insertAdjacentHTML("beforeend", '<span class="stamp held">HELD · NEEDS OK</span>');
+            await sleep(1700);
+            e.querySelector(".stamp").remove();
+            e.insertAdjacentHTML("beforeend", '<span class="stamp ok">APPROVED</span>');
+          }
+          await sleep(1300);
         }
-        await sleep(400);
-        orb.classList.remove("busy");
-        add(`msg ${s.warn ? "warn" : "agent"}`, s.reply);
-        await sleep(2600);
       }
     }
-    play();
+    print();
 
-    // ---- Interactive flow ----
+    // ---- Sale journey: stations rise in 3D with scroll, click for detail ----
     const DETAILS = [
-      ["🛍️", "A shopper asks in plain English", "\"A gift for a pour-over nerd under $50.\" No filters or search boxes: the shopper just says what they want."],
-      ["🤖", "The AI concierge builds the cart", "It searches the real catalog (<code>search_products</code>), keeps to the budget, fills the cart (<code>add_to_cart</code>) and creates a <b>PayPal order</b> (<code>start_checkout</code>)."],
-      ["🅿️", "The buyer pays with PayPal", "The <b>PayPal JS SDK Smart Button</b> appears in the chat. The buyer approves, the server captures the order (<b>Orders v2</b>), and the agent never sees card details."],
-      ["📒", "The sale lands in the live ledger", "Server-Sent Events push it into the merchant's <b>AG Grid</b> straight away, with flashing rows, status pills and KPIs that count up."],
-      ["🧾", "Tally, the clerk, handles the rest", "Refunds (<b>Payments v2</b>), invoices (<b>Invoicing v2</b>), contractor <b>Payouts</b> and cash-flow answers. Anything over your limits waits for one-click approval."],
+      ["A shopper asks in plain English", "“A gift for a pour-over nerd under $50.” There are no filters to fiddle with; the shopper just says what they want.", "Gemini function calling"],
+      ["The concierge builds the cart", "It searches the real catalog so it can't invent products or prices, keeps to the budget, and creates the PayPal order.", "PayPal Orders v2: create order"],
+      ["The buyer pays with PayPal", "The PayPal button appears inside the chat. The buyer approves and the server captures the payment. The AI never sees card details.", "PayPal JS SDK Smart Buttons · Orders v2 capture"],
+      ["The sale lands in the ledger", "Server-Sent Events push the sale into the merchant's AG Grid right away, and the totals update.", "AG Grid Community · live sync with PayPal"],
+      ["The clerk handles the rest", "Invoices, refunds, contractor payouts and money questions. Anything over your limits waits for one-click approval.", "Invoicing v2 · Payments v2 refunds · Payouts v1 · Agent Toolkit"],
     ];
-    const nodes = [...document.querySelectorAll(".node")];
-    let auto = true, cur = 0;
+    const stations = [...document.querySelectorAll(".station")];
+    let picked = false, cur = 0;
     function show(i) {
       cur = i;
-      nodes.forEach((n, k) => { n.classList.toggle("active", k === i); n.classList.toggle("lit", k < i); });
-      const [ic, h, p] = DETAILS[i];
-      $("flowDetail").innerHTML = `<div class="big fade-swap">${ic}</div><div class="fade-swap"><h3>${i + 1}. ${h}</h3><p>${p}</p></div>`;
+      stations.forEach((s, k) => { s.classList.toggle("active", k === i); s.classList.toggle("lit", k < i); });
+      const [h, p, apis] = DETAILS[i];
+      $("detail").innerHTML = `<h3 class="swap">${i + 1}. ${h}</h3><div class="swap"><p>${p}</p><p class="apis">${apis}</p></div>`;
     }
-    nodes.forEach((n, i) => {
-      n.addEventListener("click", () => { auto = false; show(i); });
-      n.addEventListener("mouseenter", () => { auto = false; show(i); });
-    });
+    stations.forEach((s, i) => s.addEventListener("click", () => { picked = true; show(i); }));
     show(0);
-    setInterval(() => { if (auto) show((cur + 1) % nodes.length); }, 2800);
+    setInterval(() => { if (!picked && !document.hidden) show((cur + 1) % stations.length); }, 3200);
+
+    const journey = $("journey"), track = $("stations");
+    function onScroll() {
+      const r = journey.getBoundingClientRect();
+      const p = Math.min(1, Math.max(0, (innerHeight - r.top) / (innerHeight * 0.75)));
+      track.style.setProperty("--progress", p.toFixed(3));
+      if (reduced || innerWidth < 980) return;
+      stations.forEach((s, i) => {
+        const local = Math.min(1, Math.max(0, p * 1.6 - i * 0.14));
+        s.style.setProperty("--tilt", (1 - local).toFixed(3));
+      });
+    }
+    lenis ? lenis.on("scroll", onScroll) : addEventListener("scroll", onScroll, { passive: true });
+    addEventListener("resize", onScroll);
+    onScroll();
+
+    // ---- Guardrail demo card (illustration only, no PayPal call) ----
+    $("demoApprove").addEventListener("click", (e) => {
+      e.currentTarget.disabled = true;
+      e.currentTarget.textContent = "Sent";
+      $("demoResult").textContent = "In the console, this click sends the PayPal payout batch. Try it there with the sample timesheet.";
+    });
   </script>
 </body>
 </html>

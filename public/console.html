@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#06070c" />
+  <meta name="theme-color" content="#17110d" />
   <title>Tally Console — AI finance clerk on PayPal</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧾</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Instrument+Sans:wght@400;500;600;700&family=Courier+Prime:wght@400;700&display=swap" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community@32.3.3/styles/ag-grid.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community@32.3.3/styles/ag-theme-quartz.css" />
   <link rel="stylesheet" href="/styles.css" />
@@ -15,11 +15,11 @@
 </head>
 <body>
   <header class="topbar">
-    <a class="logo" href="/"><div class="logo-mark">🧾</div>Tally <small class="hide-sm">AI finance clerk · Ember &amp; Oak Coffee</small></a>
-    <span id="mode" class="badge">PayPal Sandbox</span>
+    <a class="logo" href="/"><span class="logo-mark" aria-hidden="true"></span>Tally <small class="hide-sm">Ember &amp; Oak Coffee</small></a>
+    <span id="mode" class="badge">PayPal sandbox</span>
     <div class="spacer"></div>
     <div class="pop-wrap">
-      <button class="btn" id="guardBtn">🛡️ <span class="hide-sm">Guardrails</span></button>
+      <button class="btn" id="guardBtn">Guardrails</button>
       <div class="popover" id="guardPop" hidden>
         <b>Agent spending guardrails</b>
         <p class="muted">Tally acts on its own below these limits. Anything above them waits for your approval.</p>
@@ -29,12 +29,12 @@
         <button class="btn primary" id="g-save" style="width:100%;justify-content:center">Save guardrails</button>
       </div>
     </div>
-    <a class="btn" href="/shop" target="_blank">🛍️ <span class="hide-sm">Storefront</span></a>
+    <a class="btn" href="/shop" target="_blank">Storefront</a>
     <button class="btn ghost" id="resetBtn" title="Clear ledger & chats">Reset</button>
   </header>
 
   <nav class="tour reveal" id="tour">
-    <span class="tour-label">Try the full loop →</span>
+    <span class="tour-label">Try the full loop</span>
     <button data-step="sell"><i>1</i> Customer buys via AI concierge</button>
     <button data-step="invoice"><i>2</i> Invoice a purchase order</button>
     <button data-step="payout"><i>3</i> Pay contractors from a timesheet</button>
@@ -68,11 +68,11 @@
       </div>
       <div class="approvals" id="approvals"></div>
       <div class="panel grid-panel reveal" style="--d:.35s">
-        <div class="panel-h">📒 Live PayPal ledger <span class="sub" id="count"></span>
-          <span class="view-chip" id="viewChip" hidden>🤖 Tally filtered: <b id="viewChipText"></b> <button class="btn ghost small" id="viewClear">Clear ✕</button></span>
+        <div class="panel-h">Live PayPal ledger <span class="sub" id="count"></span>
+          <span class="view-chip" id="viewChip" hidden>Tally filtered <b id="viewChipText"></b> <button class="btn ghost small" id="viewClear">Clear</button></span>
           <input id="quick" placeholder="Filter…" />
-          <button class="btn" id="syncBtn" title="Refresh statuses from PayPal">↻ <span class="hide-sm">Sync</span></button>
-          <button class="btn" id="csvBtn" title="Export CSV">⬇ <span class="hide-sm">CSV</span></button>
+          <button class="btn" id="syncBtn" title="Refresh statuses from PayPal">Sync</button>
+          <button class="btn" id="csvBtn" title="Export CSV">Export CSV</button>
         </div>
         <div id="grid" class="ag-theme-quartz-dark"></div>
         <div class="grid-tip">Tip: click any row for details and one-click actions.</div>

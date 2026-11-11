@@ -16,13 +16,13 @@ $("aiLabel").textContent = `${config.ai.provider === "gemini" ? "Gemini" : "Clau
 const chat = createChat({ el: $("chat"), endpoint: "/api/merchant/chat", sessionId: SID, onEvent: (ev) => { if (ev.type === "grid") applyView(ev.view); }, onBusy: (b) => $("orb").classList.toggle("busy", b) });
 function welcome() {
   chat.add("msg agent welcome", `
-    <h3>Hi, I'm Tally 👋</h3>
+    <h3>Hi, I'm Tally.</h3>
     <p>I'm the AI finance clerk for Ember &amp; Oak Coffee, and I run its PayPal account. I can <b>send invoices, create payment links, chase late payers, refund customers and pay contractors</b>. Just ask in plain English.</p>
-    <p>You can also <b>drop in a document</b> (a PO, timesheet, receipt or screenshot) and I'll handle it. Anything risky waits for your OK 🛡️.</p>
+    <p>You can also <b>drop in a document</b> (a PO, timesheet, receipt or screenshot) and I'll handle it. Anything risky waits for your approval.</p>
     <div class="row">
-      <button data-sample="po">📄 Try a sample PO</button>
-      <button data-sample="timesheet">🧑‍🎨 Try a sample timesheet</button>
-      <button data-prompt="Give me a quick cash-flow summary">📊 Cash-flow summary</button>
+      <button data-sample="po">Try a sample PO</button>
+      <button data-sample="timesheet">Try a sample timesheet</button>
+      <button data-prompt="Give me a quick cash-flow summary">Cash-flow summary</button>
     </div>`);
 }
 welcome();
@@ -197,9 +197,9 @@ function applyView(v = {}) {
 $("viewClear").onclick = () => applyView({ reset: true });
 $("csvBtn").onclick = () => gridApi.exportDataAsCsv({ fileName: "tally-ledger.csv" });
 $("syncBtn").onclick = async () => {
-  $("syncBtn").disabled = true; $("syncBtn").textContent = "↻ Syncing…";
+  $("syncBtn").disabled = true; $("syncBtn").textContent = "Syncing…";
   const r = await fetch("/api/sync", { method: "POST" }).then((r) => r.json());
-  $("syncBtn").disabled = false; $("syncBtn").textContent = "↻ Sync";
+  $("syncBtn").disabled = false; $("syncBtn").textContent = "Sync";
   toast(r.changes?.length ? `Synced with PayPal: ${esc(r.changes.join(", "))}` : "Synced with PayPal: everything is up to date.");
 };
 $("resetBtn").onclick = async () => {
